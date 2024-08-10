@@ -1,0 +1,682 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="igvc_robot">
+
+  <xacro:property name="base_link_length" value="0.5"/>
+  <xacro:property name="base_link_radius" value="0.4"/>
+
+  <!-- Dummy Link and Joint -->
+  <link name="base_footprint">
+  </link>
+
+
+
+  <!-- <joint name="dummy_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_link2"/>
+  </joint> -->
+
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="1 0.5 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1 0.5 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.083" ixy="0" ixz="0" iyy="0.083" iyz="0" izz="0.083"/>
+    </inertial>
+  </link>
+
+  <!-- Left Wheel Link -->
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.2"/>
+      </geometry>
+      <origin rpy="1.5708 1.5708 0" xyz="0 -0.3 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.2"/>
+      </geometry>
+      <origin rpy="1.5708 1.5708 0" xyz="0 -0.3 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="1.5708 1.5708 0" xyz="0 -0.3 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  <!-- Right Wheel Link -->
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.2"/>
+      </geometry>
+      <origin rpy="1.5708 1.5708 0" xyz="0 0.3 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.2"/>
+      </geometry>
+      <origin rpy="1.5708 1.5708 0" xyz="0 0.3 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="1.5708 1.5708 0" xyz="0 0.3 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name="castor_wheel">
+    <visual>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  <!-- Lidar Link -->
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+<link name="camera_link_forward">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+<link name="camera_link_backward">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <link name="camera_link_left">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <link name="camera_link_right">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Lidar Stand -->
+  <link name="lidar_stand">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.75"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.2"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  <!-- IMU Link -->
+  <link name="imu_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name = "camera_forward_frame">
+  </link>
+
+  <joint name = "camera_forward_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link = "camera_forward_frame"/>
+    <origin xyz="0.2 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name = "camera_backward_frame">
+  </link>
+
+  <joint name = "camera_backward_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link = "camera_backward_frame"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 3.14"/>
+  </joint>
+
+  <link name = "camera_left_frame">
+  </link>
+
+  <joint name = "camera_left_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link = "camera_left_frame"/>
+    <origin xyz="0.2 0 0" rpy="0 0 1.57"/>
+  </joint>
+
+  <link name = "camera_right_frame">
+  </link>
+
+  <joint name = "camera_right_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link = "camera_right_frame"/>
+    <origin xyz="0.2 0 0" rpy="0 0 -1.57"/>
+  </joint>
+
+
+  <!-- Joint Between Base Link and Left Wheel -->
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <!-- Joint Between Base Link and Right Wheel -->
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="castor_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="castor_wheel"/>
+    <origin rpy="0 0 0" xyz="0.35 0 -0.05"/>
+  </joint>
+
+  <!-- Joint Between Base Link and Lidar Link -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.2 0 0.25" rpy="0 0 0"/>
+  </joint>
+  <!-- Lidar stand joint -->
+
+  <joint name="lidar_stand_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_stand"/>
+    <origin xyz="0.2 0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <!-- IMU joint -->
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0.01"/>
+  </joint>
+
+  <joint name="camera_forward_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link="camera_link_forward"/>
+    <origin xyz="0.2 0 0.8"/>
+  </joint>
+
+  <joint name="camera_backward_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link="camera_link_backward"/>
+    <origin xyz="-0.2 0 0.8" rpy = "0 0 3.14"/>
+  </joint>
+
+  <joint name="camera_left_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link="camera_link_left"/>
+    <origin xyz="0.2 0 0.8" rpy = "0 0 1.57"/>
+  </joint>
+
+  <joint name="camera_right_joint" type="fixed">
+    <parent link = "base_link"/>
+    <child link="camera_link_right"/>
+    <origin xyz="0.2 0 0.8" rpy = "0 0 -1.57"/>
+  </joint>
+
+  
+  
+  <!-- Gazebo Plugin -->
+ <!--  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <updateRate>20</updateRate>
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.6</wheel_separation>
+      <wheel_diameter>0.4</wheel_diameter>
+      <wheel_acceleration>1.0</wheel_acceleration>
+      <wheel_torque>20</wheel_torque>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+      <odometry_source>1</odometry_source>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>false</publish_odom_tf>
+      <publish_wheel_joint_state>true</publish_wheel_joint_state>
+      <legacy_mode>false</legacy_mode>
+    </plugin>
+  </gazebo>
+ -->
+
+
+
+<gazebo>
+  <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
+    <ros>
+      <namespace>/</namespace>
+    </ros>
+
+    <!-- wheels -->
+    <left_joint>left_wheel_joint</left_joint>
+    <right_joint>right_wheel_joint</right_joint>
+
+    <!-- kinematics -->
+    <wheel_separation>0.6</wheel_separation>
+    <wheel_diameter>0.4</wheel_diameter>
+
+    <!-- limits -->
+    <max_wheel_torque>20</max_wheel_torque>
+    <max_wheel_acceleration>1.0</max_wheel_acceleration>
+
+    <!-- output -->
+    <publish_odom>true</publish_odom>
+    <publish_odom_tf>true</publish_odom_tf>
+    <publish_wheel_tf>true</publish_wheel_tf>
+
+    <odometry_frame>odom</odometry_frame>
+    <robot_base_frame>base_link</robot_base_frame>
+  </plugin>
+</gazebo>
+
+  <!-- LIDAR Plugin -->
+  <gazebo reference="lidar_link">
+    <sensor type="ray" name="laser">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>100</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14</min_angle>
+            <max_angle>3.14</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10libgazebo_ros_ray_sensor.som.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="laser" filename="libgazebo_ros_ray_sensor.so">
+      <ros>
+          
+          <remapping>~/out:=scan</remapping>
+      </ros> 
+      <output_type>sensor_msgs/LaserScan</output_type>
+      <!-- <topicName>l/scan</topicName> -->
+      <frameName>lidar_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_link_forward">
+    <sensor type="depth" name="camera_forward">
+      <update_rate>30.0</update_rate>
+      <camera name="camera_forward">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <camera_name>camera_forward</camera_name>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <depthImageTopicName>image_depth</depthImageTopicName>
+        <frameName>camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+<gazebo reference="camera_link_backward">
+    <sensor type="camera" name="camera_backward">
+      <update_rate>30.0</update_rate>
+      <camera name="camera_backward">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller_backward" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <camera_name>camera_backward</camera_name>
+        <imageTopicName>image_raw_backward</imageTopicName>
+        <cameraInfoTopicName>camera_info_backward</cameraInfoTopicName>
+        <frameName>camera_link_backward</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_link_left">
+    <sensor type="camera" name="camera_left">
+      <update_rate>30.0</update_rate>
+      <camera name="camera_left">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller_left" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <camera_name>camera_left</camera_name>
+        <imageTopicName>image_raw_left</imageTopicName>
+        <cameraInfoTopicName>camera_info_left</cameraInfoTopicName>
+        <frameName>camera_link_left</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+<gazebo reference="camera_link_right">
+    <sensor type="camera" name="camera_right">
+      <update_rate>30.0</update_rate>
+      <camera name="camera_right">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller_right" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <camera_name>camera_right</camera_name>
+        <imageTopicName>image_raw_right</imageTopicName>
+        <cameraInfoTopicName>camera_info_right</cameraInfoTopicName>
+        <frameName>camera_link_right</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!-- <gazebo reference="imu_link">
+  <sensor name="imu_sensor" type="imu">
+   <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+      <ros>
+        <namespace>/demo</namespace>
+        <remapping>~/out:=imu</remapping>
+      </ros>
+      <initial_orientation_as_reference>false</initial_orientation_as_reference>
+    </plugin>
+    <always_on>true</always_on>
+    <update_rate>100</update_rate>
+    <visualize>true</visualize>
+    <imu>
+      <angular_velocity>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </z>
+      </angular_velocity>
+      <linear_acceleration>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </z>
+      </linear_acceleration>
+    </imu>
+  </sensor>
+</gazebo> -->
+</robot>
