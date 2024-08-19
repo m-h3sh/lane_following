@@ -46,7 +46,17 @@ class LaneFollower : public rclcpp::Node
                 "/goal_point", 10,
                 std::bind(&LaneFollower::goal_callback, this, _1)
             );
+            dir_point_sub = this->create_subscription<geometry_msgs::msg::PoseStamped>(
+                "/dir_point", 10,
+                std::bind(&LaneFollower::dir_callback, this, _1)
+            );
+            final_goal_sub = this->create_subscription<geometry_msgs::msg::PoseStamped>(
+                "/final_goal_point", 10,
+                std::bind(&LaneFollower::final_goal_callback, this, _1)
+            );
             publisher_far = this->create_publisher<std_msgs::msg::Float32MultiArray>("/far_ipm", 10);
+            dir_point_pub = this->create_publisher<std_msgs::msg::Float32MultiArray>("/direction_point", 10);
+            final_goal_pub = this->create_publisher<std_msgs::msg::Float32MultiArray>("/final_goal_point_cpp", 10);
             publisher_near = this->create_publisher<sensor_msgs::msg::PointCloud2>("/near_ipm", 10);
             goal_viz = this->create_publisher<visualization_msgs::msg::Marker>("goal_viz", 10);
         }
@@ -62,6 +72,7 @@ class LaneFollower : public rclcpp::Node
         //     odom_received = true;
 
         // }
+
 
 
         std_msgs::msg::Float32MultiArray process_point(int y, int x) {
@@ -107,7 +118,6 @@ class LaneFollower : public rclcpp::Node
 
             // Calculate the denominator for scaling (distance along the ray to the plane)
             double denom = kin_uv.dot(nc);
-
             // Ensure denom is not zero to avoid division by zero
             // if (denom != 0) {
             //     // Scale the ray by the height of the plane h
@@ -163,13 +173,26 @@ class LaneFollower : public rclcpp::Node
             return pub_array;
         }        
         
-        void send_goal(int y, int x) {
+        void send_goal(int y, int x, int y1, int x1, int y2, int x2) {
             std_msgs::msg::Float32MultiArray cloud_far = process_point(y, x);
+            std_msgs::msg::Float32MultiArray cloud_dir = process_point(y1, x1);
+            std_msgs::msg::Float32MultiArray goal_dir = process_point(y2, x2);
+            dir_point_pub->publish(cloud_dir);
             publisher_far->publish(cloud_far);
+            final_goal_pub->publish(goal_dir);
         }
 
         void goal_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
-            send_goal(int(msg->pose.position.y), int(msg->pose.position.x));
+            
+            send_goal(int(msg->pose.position.y), int(msg->pose.position.x), int(dir_point.pose.position.y), int(dir_point.pose.position.x), int(final_goal_point.pose.position.y), int(final_goal_point.pose.position.x));
+        }
+
+        void dir_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
+            dir_point = *msg;
+        }
+
+        void final_goal_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
+            final_goal_point = *msg;
         }
     
         // Start of Defining Variables ------------------------------------------------------------
@@ -186,9 +209,16 @@ class LaneFollower : public rclcpp::Node
 
         rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr subscription_caminfo;
         rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr goal_sub;
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr dir_point_sub;
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr final_goal_sub;
         // rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr subscription_odom;
 
+        geometry_msgs::msg::PoseStamped dir_point;
+        geometry_msgs::msg::PoseStamped final_goal_point;
+
         rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr publisher_far;
+        rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr final_goal_pub;
+        rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr dir_point_pub;
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_near;
         rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr goal_viz;
 

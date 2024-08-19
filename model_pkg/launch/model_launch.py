@@ -198,6 +198,7 @@ def generate_launch_description():
     launchDescriptionObject = LaunchDescription([
         # launch.actions.ExecuteProcess(cmd=['ros2', 'launch', 'slam_toolbox', 'online_async_launch.py', 'slam_params_file:=./src/model_pkg/config/mapper_params_online_async.yaml', 'use_sim_time:=true']),
         launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose',"/home/mahesh/ros2_ws/src/model_pkg/model/world.world", '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', "use_sim_time:=true", "headless:=false"], output='screen'),
+        launch.actions.ExecuteProcess(cmd=['ros2','run','tf2_ros','static_transform_publisher','0','0','0','0','0','0','map','odom']),
         # launch.actions.ExecuteProcess(cmd=['ros2','run','teleop_twist_keyboard','teleop_twist_keyboard','cmd_vel:=cmd_vel_joy'])
         ])
     launchDescriptionObject.add_action(declare_urdf_model_path_cmd)
